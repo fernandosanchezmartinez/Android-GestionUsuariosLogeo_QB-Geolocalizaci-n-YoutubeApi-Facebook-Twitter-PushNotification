@@ -1,0 +1,2 @@
+configurations.create("default")
+artifacts.add("default", file('quickblox-android-sdk-messages-2.3.3.jar'))

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ACTIVIDAD7-FERNANDO_SANCHEZ_MARTINEZ.iml" filepath="$PROJECT_DIR$/ACTIVIDAD7-FERNANDO_SANCHEZ_MARTINEZ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qblibreria/qblibreria.iml" filepath="$PROJECT_DIR$/qblibreria/qblibreria.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-content-2.3.3/quickblox-android-sdk-content-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-content-2.3.3/quickblox-android-sdk-content-2.3.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-core-2.3.3/quickblox-android-sdk-core-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-core-2.3.3/quickblox-android-sdk-core-2.3.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-customobjects-2.3.3/quickblox-android-sdk-customobjects-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-customobjects-2.3.3/quickblox-android-sdk-customobjects-2.3.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-location-2.3.3/quickblox-android-sdk-location-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-location-2.3.3/quickblox-android-sdk-location-2.3.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-messages-2.3.3/quickblox-android-sdk-messages-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-messages-2.3.3/quickblox-android-sdk-messages-2.3.3.iml" />
+    </modules>
+  </component>
+</project>
