@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
@@ -20,6 +22,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.quickblox.customobjects.model.QBCustomObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import damp_2.utad.qblibreria.QBAdminLocalizaciones;
+import damp_2.utad.qblibreria.QBAdminLocalizacionesListener;
 
 /**
  * Se importa el sdkFacebook
@@ -28,18 +37,22 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * CLASE QUE SE ENCARGA DE LA GESTIÓN DE LOS PAPAS EN NUESTRA APP
  */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, QBAdminLocalizacionesListener,FragmentoFBTW.OnFragmentInteractionListener {
 
     public GoogleMap mMap;
+    ArrayList<String> arrValor;
+
+    private ArrayList<QBCustomObject> dataLang;
+    private QBAdminLocalizaciones qbAdminLocalizaciones;
 
     public LocationManager LocManager;
     String locationProvider = LocationManager.GPS_PROVIDER;
     Marker mkCentro;
 
-    public void initFragments() {
+    /*public void initFragments() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
           mapFragment.isVisible();
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // generarHash();
 
-        initFragments();
+        //initFragments();
         /**
          * se inicializa antes de ejecutar ninguna operacion en el oncreate de nuestra actiivity
          */
@@ -94,9 +107,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.addMarker(new MarkerOptions()
+       /* mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(10, 10))
-                .title("Hello world"));
+                .title("Hello world"));*/
 
 
         /*
@@ -114,17 +127,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Toast toast1 =
                 Toast.makeText(getApplicationContext(),
-                        "TU LONGITUD ES:" + longitudActual + "           TU LATITUD ES:" + latitudActual, Toast.LENGTH_SHORT);
+                        "TU LONGITUD ES:" + longitudActual + " TU LATITUD ES:" + latitudActual, Toast.LENGTH_SHORT);
 
         toast1.show();
 
         if (mkCentro != null) {
             mkCentro.remove();
-        } 
+        }
 
         LatLng posActual = new LatLng(latitudActual, longitudActual);
 
-        mkCentro = mMap.addMarker(new MarkerOptions().position(posActual).title("POSICION ACTUAL"));
+        mkCentro = mMap.addMarker(new MarkerOptions().position(posActual).title("ÉSTA ES LA POSICIÓN ACTUAL"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(posActual));
 
     }
@@ -147,4 +160,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    @Override
+    public void getLocalizaciones(ArrayList<QBCustomObject> arrCustomObjects) {
+       arrValor = new ArrayList<>();
+        this.dataLang = arrCustomObjects;
+        if (arrCustomObjects != null) {
+
+
+            Log.v("MapsActivity", "cargando datos");
+            for (int i = 0; i < dataLang.size(); i++) {
+                HashMap<String, Object> fields = dataLang.get(i).getFields();
+
+                Log.v("MapsActivity", "Los datos son: " + fields.get("valor"));
+                arrValor.add(fields.get("valor").toString());
+
+            }
+        }
+        /**
+         * Se modifican con el texto en el idioma correspondiente los distintos elementos de nuesta pantalla de login
+         */
+      /*  tv1.setText(arrValor.get(0).toString());
+        tv2.setText(arrValor.get(1).toString());
+        botonLogin.setText(arrValor.get(2).toString());*/
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+   /* public void onDescargarCoordClick(View v) {
+
+        Button botonLogin = (Button)v;
+        if(botonLogin.getId()==(R.id.btn_descargarCoord))
+        {
+            LatLng sydney = new LatLng(-34, 151);
+            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            tv1.setText(arrValor.get(0).toString());
+            tv2.setText(arrValor.get(1).toString());
+            botonLogin.setText(arrValor.get(2).toString());
+        }
+    }*/
 }

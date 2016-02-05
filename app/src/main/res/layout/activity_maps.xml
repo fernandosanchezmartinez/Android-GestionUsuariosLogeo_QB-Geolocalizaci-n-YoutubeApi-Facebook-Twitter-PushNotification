@@ -21,10 +21,19 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="damp_2.utad.actividad7_fernando_sanchez_martinez.BlankFragment"
+        android:name="damp_2.utad.actividad7_fernando_sanchez_martinez.FragmentoFBTW"
         android:id="@+id/fragment"
-        android:layout_alignParentTop="true"
+        android:layout_marginBottom="69dp"
+        android:layout_above="@+id/btn_posActual"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descargar coordenadas"
+        android:layout_alignBottom="@+id/btn_posActual"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/btn_descargarCoord" />
 
 
 </RelativeLayout>
