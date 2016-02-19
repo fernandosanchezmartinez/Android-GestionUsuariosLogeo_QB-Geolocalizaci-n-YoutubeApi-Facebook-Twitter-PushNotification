@@ -27,4 +27,5 @@ dependencies {
     compile project(':quickblox-android-sdk-customobjects-2.3.3')
     compile project(':quickblox-android-sdk-location-2.3.3')
     compile project(':quickblox-android-sdk-messages-2.3.3')
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

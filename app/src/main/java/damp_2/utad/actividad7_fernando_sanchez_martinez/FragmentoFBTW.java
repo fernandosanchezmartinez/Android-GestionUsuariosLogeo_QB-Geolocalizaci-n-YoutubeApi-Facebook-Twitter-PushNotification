@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.share.widget.ShareDialog;
@@ -83,7 +84,7 @@ public class FragmentoFBTW extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v = inflater.inflate(R.layout.fragment_blank, container, false);
+        View v = inflater.inflate(R.layout.fragment_fyt, container, false);
 
         btn_fcb = (Button) v.findViewById(R.id.btn_facebook);
         btn_twit = (Button) v.findViewById(R.id.btn_twitter);
@@ -121,7 +122,7 @@ public class FragmentoFBTW extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if (v.getId() == R.id.btn_facebook) {
-
+            Toast.makeText(v.getContext(), " facebook ", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.btn_twitter) {
            /* TweetComposer.Builder builder = new TweetComposer.Builder(this).text("Just setting up my Fabric!");
             builder.show();*/

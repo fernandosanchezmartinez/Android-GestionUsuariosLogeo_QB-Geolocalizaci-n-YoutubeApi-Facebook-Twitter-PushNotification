@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,13 +39,15 @@ import damp_2.utad.qblibreria.QBAdminLocalizacionesListener;
 /**
  * CLASE QUE SE ENCARGA DE LA GESTIÓN DE LOS PAPAS EN NUESTRA APP
  */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, QBAdminLocalizacionesListener,FragmentoFBTW.OnFragmentInteractionListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, QBAdminLocalizacionesListener, FragmentoFBTW.OnFragmentInteractionListener {
 
     public GoogleMap mMap;
     ArrayList<String> arrValor;
+    private MainActivity ma;
 
     private ArrayList<QBCustomObject> dataLang;
-    private QBAdminLocalizaciones qbAdminLocalizaciones;
+    public QBAdminLocalizaciones qbAdminLocalizaciones;
+    //buttonListener botonListener;
 
     public LocationManager LocManager;
     String locationProvider = LocationManager.GPS_PROVIDER;
@@ -74,6 +78,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+       // botonListener = new buttonListener(this);
+
         LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -89,6 +95,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         LocManager.requestLocationUpdates(locationProvider, 0, 0, this);
+
+        qbAdminLocalizaciones = new QBAdminLocalizaciones();
+
+        qbAdminLocalizaciones.addLocalizacionesListener(this);
+
 
 
     }
@@ -127,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Toast toast1 =
                 Toast.makeText(getApplicationContext(),
-                        "TU LONGITUD ES:" + longitudActual + " TU LATITUD ES:" + latitudActual, Toast.LENGTH_SHORT);
+                        "TU LONGITUD ES:" + longitudActual + " \nTU LATITUD ES:" + latitudActual, Toast.LENGTH_SHORT);
 
         toast1.show();
 
@@ -137,7 +148,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng posActual = new LatLng(latitudActual, longitudActual);
 
-        mkCentro = mMap.addMarker(new MarkerOptions().position(posActual).title("ÉSTA ES LA POSICIÓN ACTUAL"));
+        mkCentro = mMap.addMarker(new MarkerOptions().position(posActual).title("ÉSTA ES LA POSICIÓN ACTUAL").icon(BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(posActual));
 
     }
@@ -161,27 +173,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void getLocalizaciones(ArrayList<QBCustomObject> arrCustomObjects) {
-       arrValor = new ArrayList<>();
-        this.dataLang = arrCustomObjects;
-        if (arrCustomObjects != null) {
+    public void getLocalizaciones(ArrayList<QBCustomObject> datos) {
+        ArrayList<String> arrValor = new ArrayList<>();
+        this.dataLang = datos;
+        if (datos != null) {
 
-
-            Log.v("MapsActivity", "cargando datos");
+            Log.v("MainActivity", "cargando datos");
             for (int i = 0; i < dataLang.size(); i++) {
                 HashMap<String, Object> fields = dataLang.get(i).getFields();
 
-                Log.v("MapsActivity", "Los datos son: " + fields.get("valor"));
-                arrValor.add(fields.get("valor").toString());
+                Log.v("MainActivity", "cargando los datos de localizaciones");
+                arrValor.add(fields.toString());
+
+                String titulo = (fields.get("nombre")).toString();
+                String latitud = (fields.get("latitud")).toString();
+                String longitud = (fields.get("longitud")).toString();
+
+                LatLng marcador = new LatLng(Double.parseDouble(latitud), Double.parseDouble(longitud));
+                mMap.addMarker(new MarkerOptions().position(marcador).title(titulo));
 
             }
+
         }
-        /**
-         * Se modifican con el texto en el idioma correspondiente los distintos elementos de nuesta pantalla de login
-         */
-      /*  tv1.setText(arrValor.get(0).toString());
-        tv2.setText(arrValor.get(1).toString());
-        botonLogin.setText(arrValor.get(2).toString());*/
 
     }
 
@@ -190,18 +203,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-   /* public void onDescargarCoordClick(View v) {
+    public void onDescargarCoordClick(View v) {
+        Log.v("MapsActivity", "boton descargar coordenadas pulsado");
+        qbAdminLocalizaciones.getData();
+        Toast.makeText(this, " deescargando coordenadas... ", Toast.LENGTH_SHORT).show();
 
-        Button botonLogin = (Button)v;
-        if(botonLogin.getId()==(R.id.btn_descargarCoord))
-        {
-            LatLng sydney = new LatLng(-34, 151);
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-            tv1.setText(arrValor.get(0).toString());
-            tv2.setText(arrValor.get(1).toString());
-            botonLogin.setText(arrValor.get(2).toString());
-        }
-    }*/
+    }
 }
+

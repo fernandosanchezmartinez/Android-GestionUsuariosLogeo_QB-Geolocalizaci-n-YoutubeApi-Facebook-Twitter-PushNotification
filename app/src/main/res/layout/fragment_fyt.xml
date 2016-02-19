@@ -15,32 +15,31 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
-            android:layout_weight="0.70"
             android:weightSum="1">
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="64dp"
+                android:layout_height="89dp"
                 android:text="FACEBOOK"
                 android:id="@+id/btn_facebook"
                 android:layout_gravity="left|top"
                 android:background="#344e83"
                 android:textSize="17dp"
-                android:layout_weight="0.07"
+                android:layout_weight="0.45"
                 android:textColor="#bad1f8"
                 android:layout_marginRight="10dp" />
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="67dp"
+                android:layout_height="90dp"
                 android:text="TWITTER"
                 android:id="@+id/btn_twitter"
                 android:layout_gravity="right|top"
                 android:background="#80d1eb"
                 android:textSize="17dp"
-                android:layout_weight="0.09" />
+                android:layout_weight="0.48" />
         </LinearLayout>
 
     </LinearLayout>

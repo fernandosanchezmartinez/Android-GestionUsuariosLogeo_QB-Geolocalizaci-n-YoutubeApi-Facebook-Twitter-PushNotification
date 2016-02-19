@@ -29,4 +29,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile project(':qblibreria')
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

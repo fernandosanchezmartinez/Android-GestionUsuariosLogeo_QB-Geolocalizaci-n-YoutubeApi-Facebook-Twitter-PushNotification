@@ -12,25 +12,29 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GUARDAR POS. ACTUAL"
+        android:layout_height="70dp"
+        android:text="DESCARGAR LOCALIZACIONES"
         android:id="@+id/btn_posActual"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:onClick="onDescargarCoordClick"
+        android:layout_marginTop="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btn_descargarCoord" />
 
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="damp_2.utad.actividad7_fernando_sanchez_martinez.FragmentoFBTW"
         android:id="@+id/fragment"
-        android:layout_marginBottom="69dp"
-        android:layout_above="@+id/btn_posActual"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="93dp" />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descargar coordenadas"
+        android:layout_height="70dp"
+        android:text="GUARDAR POS. ACTUAL"
         android:layout_alignBottom="@+id/btn_posActual"
         android:layout_alignParentEnd="true"
         android:id="@+id/btn_descargarCoord" />

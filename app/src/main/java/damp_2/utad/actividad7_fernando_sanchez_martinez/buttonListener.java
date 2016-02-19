@@ -10,6 +10,7 @@ public class buttonListener implements View.OnClickListener{
 
     MainActivity mainActivity;// Se crea una referencia a MainActivity
 
+
     /**
      * Constructor
      * @param ma1
@@ -25,10 +26,13 @@ public class buttonListener implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
-        Button botonLogin = (Button)v;
-        if(botonLogin.getId()==(R.id.btn_Login))
+        Button boton = (Button)v;
+        if(boton.getId()==(R.id.btn_Login))
         {
             mainActivity.logear(mainActivity.et1.getText().toString(),mainActivity.et2.getText().toString());
-        }
+        }/*else if(boton.getId()==(R.id.btn_descargarCoord)){
+            mapsActivity.qbAdminLocalizaciones.getData();
+
+        }*/
     }
 }

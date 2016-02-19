@@ -22,6 +22,7 @@ import damp_2.utad.qblibreria.QBAdmin;
 import damp_2.utad.qblibreria.QBAdminIdioma;
 import damp_2.utad.qblibreria.QBAdminIdiomaListener;
 import damp_2.utad.qblibreria.QBAdminListener;
+import damp_2.utad.qblibreria.QBAdminLocalizaciones;
 import damp_2.utad.qblibreria.QBUsersLogin;
 import damp_2.utad.qblibreria.QBUsersLoginListener;
 
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
     private QBAdmin qbAdmin;
     private QBAdminIdioma qbAdminIdioma;
     private QBUsersLogin qbUsersLogin;
+
+    private QBAdminLocalizaciones qbAdminLocalizaciones;
+
     private ArrayList<QBCustomObject> dataLang;
     private TextView tv1;
     private TextView tv2;
@@ -59,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
     private String apKey = "Z4RtXJ8ND2-HkNa";
     private String apSecret = "M2jw43vOOOB7ju3";
 
-    //SharedPreferences settings = getSharedPreferences("actividad6", 0);
 
     /**
      * Método que se ejecuta y crea el Main Activity
@@ -112,29 +115,8 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
         nombre = String.valueOf(et1.getText());
         password = String.valueOf(et2.getText());
 
-        qbUsersLogin.loginUsuario(nombre, password);
-    }
-
-   /* public void generarHash(){
-        PackageInfo info;
-        try {
-            info = getPackageManager().getPackageInfo("gebulot.pmdm_actividad7_sol", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                //String something = new String(Base64.encodeBytes(md.digest()));
-                Log.e("hash key", something);
-            }
-        } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found", e1.toString());
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm", e.toString());
-        } catch (Exception e) {
-            Log.e("exception", e.toString());
-        }
-    }*/
+        qbUsersLogin.loginUsuario(nombre, password );
+   }
 
     /**
      * Método que nos avisa si la sesión ha sido creada y en que estado.
@@ -190,18 +172,16 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
          */
         tv1.setText(arrValor.get(0).toString());
         tv2.setText(arrValor.get(1).toString());
-        botonLogin.setText(arrValor.get(2).toString());
+        botonLogin.setText(arrValor.get(2).toString());}
 
-    }
 
-    /**
-     * Método que lanza la otra actividad del mapa si el logeo ha sido exitoso, y en caso de que el usuario haya
-     * seleccionado el checkBox, almacenará las creedenciales en la memoria interna para fururos usos de app y
-     * comodidad del usuario.
-     *
-     * @param logeado
-     */
-    @Override
+
+
+
+
+
+
+  /*  @Override
     public void login(boolean logeado) {
         //SharedPreferences settings = getSharedPreferences("actividad6", 0);
         if (logeado == true) {
@@ -224,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
             Toast.makeText(MainActivity.this, " Usuario o contraseña inválidos ", Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 
     public void lanzar1() {
         Intent i = new Intent(this, MapsActivity.class);
@@ -262,4 +242,28 @@ public class MainActivity extends AppCompatActivity implements QBAdminListener, 
         }
     }
 
+
+    @Override
+    public void login(boolean logeado) {
+        //SharedPreferences settings = getSharedPreferences("actividad6", 0);
+        if (logeado == true) {
+
+            if (radioCred.isChecked()) {
+                SharedPreferences settings = getSharedPreferences("actividad6", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("USUARIO", nombre);
+                editor.putString("PASS", password);
+                editor.commit();
+                lanzar1();// se lanza la nueva activity
+            } else {
+                lanzar1();// se lanza la nueva activity
+            }
+
+            //lanzar1();// se lanza la nueva activity
+
+            Toast.makeText(MainActivity.this, et1.getText() + " Ha logueado con éxito ", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, " Usuario o contraseña inválidos ", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
