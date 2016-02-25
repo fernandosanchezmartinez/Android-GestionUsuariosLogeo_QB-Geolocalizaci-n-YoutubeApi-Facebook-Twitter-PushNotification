@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ACTIVIDAD7-FERNANDO_SANCHEZ_MARTINEZ.iml" filepath="$PROJECT_DIR$/ACTIVIDAD7-FERNANDO_SANCHEZ_MARTINEZ.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pushnotification_lib/pushnotification_lib.iml" filepath="$PROJECT_DIR$/pushnotification_lib/pushnotification_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/qblibreria/qblibreria.iml" filepath="$PROJECT_DIR$/qblibreria/qblibreria.iml" />
       <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-content-2.3.3/quickblox-android-sdk-content-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-content-2.3.3/quickblox-android-sdk-content-2.3.3.iml" />
       <module fileurl="file://$PROJECT_DIR$/quickblox-android-sdk-core-2.3.3/quickblox-android-sdk-core-2.3.3.iml" filepath="$PROJECT_DIR$/quickblox-android-sdk-core-2.3.3/quickblox-android-sdk-core-2.3.3.iml" />

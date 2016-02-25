@@ -9,9 +9,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 
-/**
- * Created by Yony on 07/02/16.
- */
+
 public class MiIntentService extends IntentService {
 
     public static final String GCM_INTENT_SERVICE = "GcmIntentService";
@@ -69,6 +67,7 @@ public class MiIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void processNotification(String type, Bundle extras) {
+
 
 
     }

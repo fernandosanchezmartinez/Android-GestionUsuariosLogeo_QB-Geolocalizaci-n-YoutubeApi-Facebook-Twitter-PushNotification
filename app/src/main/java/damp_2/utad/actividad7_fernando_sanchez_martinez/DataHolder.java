@@ -12,9 +12,7 @@ import damp_2.utad.pushnotification_lib.PushNotificationAdmin;
 import damp_2.utad.pushnotification_lib.PushNotificationsAdminListener;
 import damp_2.utad.qblibreria.QBAdmin;
 
-/**
- * Created by Yony on 20/01/2016.
- */
+
 public class DataHolder implements PushNotificationsAdminListener{
 
     private String apId = "33666";

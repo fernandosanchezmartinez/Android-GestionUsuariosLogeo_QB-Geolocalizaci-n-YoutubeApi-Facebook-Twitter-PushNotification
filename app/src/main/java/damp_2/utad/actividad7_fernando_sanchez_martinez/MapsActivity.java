@@ -100,6 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         qbAdminLocalizaciones.addLocalizacionesListener(this);
 
+        DataHolder.instance.initPushNotificationsAdmin(this, "162501646954");
+
 
 
     }
