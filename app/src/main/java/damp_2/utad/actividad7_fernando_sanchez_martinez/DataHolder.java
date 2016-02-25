@@ -6,63 +6,74 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import damp_2.utad.pushnotification_lib.Consts;
 import damp_2.utad.pushnotification_lib.PushNotificationAdmin;
 import damp_2.utad.pushnotification_lib.PushNotificationsAdminListener;
-import damp_2.utad.qblibreria.QBAdmin;
 
-
+/**
+ * Clase encargada de la gestion de los datos, en éste caso le pasamos el apid y será
+ * la encargada de iniciar el push notification admin que posteriormente hará el registro
+ * al GCM para que le retorne su número
+ */
 public class DataHolder implements PushNotificationsAdminListener{
 
     private String apId = "33666";
-    private String apKey = "Z4RtXJ8ND2-HkNa";
-    private String apSecret = "M2jw43vOOOB7ju3";
 
     public final static DataHolder instance=new DataHolder();
     public final String TAG="DataHolder";
 
-
-    public QBAdmin qbAdmin;
+    /**
+     * Declaramos una variable propia que hara referencia al pushnotificationsadmin
+     */
     public PushNotificationAdmin pushNotificationAdmin;
 
     public DataHolder(){
-
+        //contructor de data holder
     }
 
-    public void initQbAdmin(Context context){
-        qbAdmin = new QBAdmin(apId, apKey, apSecret);
-    }
-
+    /**
+     * MÉTDO ENCARGADO DE CREAR EL PUSHNOTIFICATION ADMIN, PASANDOLE POR PARÁMETRO EL NÚMERO DE REGISTRO
+     * DE LA APLICACION (apId) Y LA ACTIVITY. SE LE AÑADE EL LISTENER
+     * @param activity
+     * @param aid
+     */
     public void initPushNotificationsAdmin(Activity activity,String aid){
         pushNotificationAdmin=new PushNotificationAdmin(activity,aid);
         pushNotificationAdmin.addListener(this);
-
-
+        /**
+         * SE REGISTRA EL RECIVER PROPIO CREADO EN ÉSTA CLASE QUE RECIBIRÁ LOS MENSAJES
+         * (ACTIVIDAD 8)
+         */
         LocalBroadcastManager.getInstance(activity).registerReceiver(mPushReceiver,
                 new IntentFilter(Consts.NEW_PUSH_EVENT));
     }
 
+    /**
+     * Método boleano qyue nos retorna true o false si el registro se ha efectuado correctamente
+     * @param blRegistered
+     * @return
+     */
     @Override
-    public void pushNotificationsRegistered(boolean blRegistered) {
+    public boolean pushNotificationsRegistered(boolean blRegistered) {
 
+        return blRegistered;
     }
 
-    // ESTE ES EL ULTIMO PASO QUE HARA EL MENSAJE RECIBIDO. AQUI ES DONDE EJECUTAMOS LO QUE NOS INTERESE EJECUTAR
-    //AL RECIBIR UN MENSAJE. EN CASO DE RECIBIR EL MENSAJE CUANDO ESTAMOS DENTRO DE LA APP, O SI ESTAMOS FUERA DE LA APP
-    //AQUI ES DONDE LLEGA EL MENSAJE. TODAS LAS ACCIONES QUE HAGAMOS CON EL MENSAJE SE HARAN AQUI.
-    //
+    /**
+     * PROCESAMIENTO DE MENSAJES (ACTIVIDAD8)
+     */
     private BroadcastReceiver mPushReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            // Get extra data included in the Intent
             String message = intent.getStringExtra(Consts.EXTRA_MESSAGE);
             String qbcid = intent.getStringExtra("QBCID");
 
-            //Log.v(TAG, "Receiving event " + Consts.NEW_PUSH_EVENT + " with data: " + message);
+            Log.v(TAG, "Receiving event " + Consts.NEW_PUSH_EVENT + " with data: " + message);
 
-            //AQUI INSERTAREMOS EL CODIGO QUE EJECUTAREMOS CUANDO LLEGUE EL MENSAJE.
+
         }
     };
 }
