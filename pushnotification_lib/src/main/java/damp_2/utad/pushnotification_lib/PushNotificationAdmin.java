@@ -25,25 +25,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * CLASE PUSH NOTIFICATION ADMIN. FUNDAMENTAL EN EL MANEJO DE MENSAJES SE ENCARGA DEL REGISTRO
+ * EN EL GCM Y DE LA CONEXION CON QUIKBLOX(COMO SERVER)
+ */
 public class PushNotificationAdmin{
 
     private static final String TAG = "PushNotificationAdmin";
-    private static final String LOG_TAG="PushNotificationAdmin";
+    //private static final String LOG_TAG="PushNotificationAdmin";
 
+    /**
+     * SE DECLARA EL GCM
+     */
     private GoogleCloudMessaging googleCloudMessaging;
-    private String regId;
-    private Activity activity;
-    private String sProjectNumber="";
+    private String regId;// VARIABLE QUE CONTENDRA EL NUMERO DE REGISTRO DE NUETRA APP
+    private Activity activity;// VARIABLE ACTIVITY
+    private String sProjectNumber="";// VARIABLE QUE CONTENDRÁ EL ID DE NUESTRO PROYECTO
 
     private ArrayList<PushNotificationsAdminListener> listeners=new ArrayList<PushNotificationsAdminListener>();
 
+    /**
+     * CONSTRUCTOR DEL PUSH NOTIFICATION ADMIN SE IGUALAN LA ACTIVITY Y EL IDENTIFICADOR DE
+     * NUETSTRO PROYECTO.
+     * @param activity
+     * @param sProjectNumber
+     */
     public PushNotificationAdmin(Activity activity,String sProjectNumber){
         this.activity=activity;
         this.sProjectNumber=sProjectNumber;
 
     }
 
+    /**
+     * MÉTODO QUE SE ENCARGA DEL REGISTRO EN EL GCM, ES UN MÉTODO FUNDAMENTAL Y SE PODRIA
+     * LLAMAR EN EL ON CREATE DE NUETRA APLICACIÓN TRAS EL LOGEO EN QB O SIMPLEMENTE LLAMARLO
+     * EN EL ON CLIK DE UN BOTON EN LA ACTIVIDAD DEL MAPA
+     */
     public void registerToNotification(){
         checkPlayService();
     }
@@ -57,29 +74,40 @@ public class PushNotificationAdmin{
         listeners.remove(listener);
     }
 
+
+//-----------------------------------------------------------------------------------------------------------//
+    /**
+     * métodos de chekeo de servicios, se comprueba que el id de registro sea el correcto y en ese caso llama
+     * al método de subscripción.
+     */
+//-----------------------------------------------------------------------------------------------------------//
     private void checkPlayService() {
         Log.v(TAG, "checkPlayService ");
         // Check device for Play Services APK. If check succeeds, proceed with
         // GCM registration.
         if (checkPlayServices()) {
-            googleCloudMessaging = GoogleCloudMessaging.getInstance(activity);
-            regId = getRegistrationId();
+            googleCloudMessaging = GoogleCloudMessaging.getInstance(activity);// se obtiene la instancia del GCM
+            regId = getRegistrationId();// Se obtiene el id de registro
             Log.v(TAG, "checkPlayService "+regId);
-            if (regId.isEmpty()) {
+            if (regId.isEmpty()) {// en el caso que el registro esté vacio, se llama a un método q lo registrará en 2 plano.
                 registerInBackground();
             }
             else{
+                /**
+                 * LLAMAD A MÉTODO QUE SUBSCRIBE NUESTRA APP AL SERVICIO DE PUSH NOTIFICATIONS
+                 * SE LE PASA EL ID DE REGISTRO
+                 */
                 subscribeToPushNotifications(regId);
             }
         } else {
             Log.v(TAG, "No valid Google Play Services APK found.");
         }
     }
-
     /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
+     * CHEKEA SI LA VERSION DEL APK DEL DISPOSITIVO ES COMPATIBLE CON EL SERVICIO DE MENSAJERÍA DE GOOGLE GCM
+     * (se usa en el método superior para antes de realizar las comprobaciones del id de registro, se tenga claro
+     *  que el dispositivo es compatible)
+     * @return
      */
     public boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
@@ -95,14 +123,13 @@ public class PushNotificationAdmin{
         }
         return true;
     }
+//-----------------------------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------------------------//
 
     /**
-     * Gets the current registration ID for application on GCM service.
-     * <p/>
-     * If result is empty, the app needs to register.
-     *
-     * @return registration ID, or empty string if there is no existing
-     * registration ID.
+     * MÉTODO QUE OBTIENE EL ID DE REGISTRO
+     * GESTIONA EL MANEJO Y PERDIDA DE ID DE REGISTRO EN CASO DE ACTUALIZACION DE APP
+     * @return
      */
     private String getRegistrationId() {
         final SharedPreferences prefs = getGCMPreferences();
@@ -124,7 +151,8 @@ public class PushNotificationAdmin{
     }
 
     /**
-     * @return Application's version code from the {@code PackageManager}.
+     * MÉTODO QUE OBTIENE LA VERSION DE LA APP
+     * @return
      */
     public int getAppVersion() {
         try {
@@ -136,11 +164,10 @@ public class PushNotificationAdmin{
         }
     }
 
+
     /**
-     * Registers the application with GCM servers asynchronously.
-     * <p/>
-     * Stores the registration ID and app versionCode in the application's
-     * shared preferences.
+     * MÉTODO QUE REGISTRA NUESTRA APLICACIÓN EN EL SERVICIO DE GCM. LO REALIZA EN SEGUNDO PLANO
+     * DE FORMA ASINCRONA Y ALMACENA DICHO ID EN EL SAHREDPREFERENCES.
      */
     private void registerInBackground() {
         new AsyncTask<Void, Void, String>() {
@@ -152,7 +179,7 @@ public class PushNotificationAdmin{
                         googleCloudMessaging = GoogleCloudMessaging.getInstance(activity);
                     }
                     regId = googleCloudMessaging.register(sProjectNumber);
-                    msg = "Device registered, registration ID=" + regId;
+                    msg = "Device registered, registration ID=" + regId;// QUEDA REGISTRADA LA APLICACIÓN
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
@@ -187,26 +214,24 @@ public class PushNotificationAdmin{
     }
 
     /**
-     * @return Application's {@code SharedPreferences}.
+     * ALMACENA EL ID DE REGISTRO DE NUESTRA APP EN EL DISPOSITIVO(sharedPreferences)
+     * @return
      */
     private SharedPreferences getGCMPreferences() {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
+
         return activity.getSharedPreferences(activity.getPackageName(), Context.MODE_PRIVATE);
     }
 
     /**
-     * Subscribe to Push Notifications
-     *
+     * MÉTODO ENCARGADO DE CREAR EL TOKEN CON EL ID DE REGISTRO DE ANDROID Y COMPLETAR EL REGISTRO EN GCM
      * @param regId registration ID
      */
     private void subscribeToPushNotifications(String regId) {
-        //Create push token with  Registration Id for Android
-        //
+
         Log.v(TAG, "subscribing...");
 
         String deviceId;
-
+        // SE OBTIENE EL ID COMPROBANDO QUE TIPO DE DISPOSITIVO ES (MOVIL, TABLET)
         final TelephonyManager mTelephony = (TelephonyManager) activity.getSystemService(
                 Context.TELEPHONY_SERVICE);
         if (mTelephony.getDeviceId() != null) {
@@ -215,6 +240,10 @@ public class PushNotificationAdmin{
             deviceId = Settings.Secure.getString(activity.getContentResolver(),
                     Settings.Secure.ANDROID_ID); //*** use for tablets
         }
+        /**
+         * SE HACE LA SUBSCRIPCION PASANDOLE TODOS LOS PARÁMETROS NECESARIOS Y USANDO EL MÉTODO HEREDADO DEL LISTENER PUSH
+         * NOTIFICATION REGISTERED, NOTIFICANDO EL ESTADO DEL REGISTRO EN CUALQUIER LUGAR DE NUESTRA APP.
+         */
 
         QBMessages.subscribeToPushNotificationsTask(regId, deviceId, QBEnvironment.DEVELOPMENT, new QBEntityCallbackImpl<ArrayList<QBSubscription>>() {
             @Override
