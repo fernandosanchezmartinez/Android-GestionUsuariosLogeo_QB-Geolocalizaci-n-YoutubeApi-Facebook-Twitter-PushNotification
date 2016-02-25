@@ -19,10 +19,11 @@ import damp_2.utad.pushnotification_lib.PushNotificationsAdminListener;
  */
 public class DataHolder implements PushNotificationsAdminListener{
 
-    private String apId = "33666";
+    //private String apId = "861311781554";
 
     public final static DataHolder instance=new DataHolder();
     public final String TAG="DataHolder";
+    private MapsActivity map;
 
     /**
      * Declaramos una variable propia que hara referencia al pushnotificationsadmin
@@ -57,7 +58,7 @@ public class DataHolder implements PushNotificationsAdminListener{
      */
     @Override
     public boolean pushNotificationsRegistered(boolean blRegistered) {
-
+        //Toast.makeText(map, " GUARDANDO DATOS EN MEMORIA INTERNA: ID_REGISTRO Y VERSION DE APP ", Toast.LENGTH_SHORT).show();
         return blRegistered;
     }
 
