@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -271,7 +270,7 @@ public class PushNotificationAdmin{
      * @param regId registration ID
      */
     private void storeRegistrationId(String regId) {
-        Toast.makeText(activity, " GUARDANDO DATOS EN MEMORIA INTERNA: ID_REGISTRO Y VERSION DE APP ", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(activity, " GUARDANDO DATOS EN MEMORIA INTERNA: ID_REGISTRO Y VERSION DE APP ", Toast.LENGTH_SHORT).show();
         final SharedPreferences prefs = getGCMPreferences();
         int appVersion = getAppVersion();
         Log.v(TAG, "Saving regId on app version " + appVersion);
