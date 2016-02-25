@@ -39,6 +39,15 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/btn_descargarCoord" />
 
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="damp_2.utad.actividad7_fernando_sanchez_martinez.FragmentoYoutube"
+        android:id="@+id/fragmentYoutube"
+        android:layout_above="@+id/fragment"
+        android:layout_alignStart="@+id/fragment"
+        android:layout_marginBottom="41dp" />
+
 
 </RelativeLayout>
 
