@@ -24,6 +24,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.quickblox.customobjects.model.QBCustomObject;
 
 import java.util.ArrayList;
@@ -39,8 +43,9 @@ import damp_2.utad.qblibreria.QBAdminLocalizacionesListener;
 /**
  * CLASE QUE SE ENCARGA DE LA GESTIÓN DE LOS PAPAS EN NUESTRA APP
  */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, QBAdminLocalizacionesListener, FragmentoFBTW.OnFragmentInteractionListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, QBAdminLocalizacionesListener, FragmentoFBTW.OnFragmentInteractionListener, YouTubePlayer.OnInitializedListener, FragmentoYoutube.OnFragmentInteractionListener {
 
+    //String videoYoutube="";
     public GoogleMap mMap;
     ArrayList<String> arrValor;
     private MainActivity ma;
@@ -57,6 +62,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
           mapFragment.isVisible();
     }*/
+    //---------------------------------------------------------------------------------------------------------------------//
+    public static final String DEVELOPER_KEY = "AIzaSyA8KbJG0HqocvDBS8PQPQ3EymancjukT2s";
+    private static final int RECOVERY_DIALOG_REQUEST = 1;
+    public String VIDEO_ID = "";
+
+    YouTubePlayerFragment myYouTubePlayerFragment;
+    public YouTubePlayer youTubePlayer;
+
+    YouTubePlayer.OnInitializedListener listeneryoutube;
+
+    //---------------------------------------------------------------------------------------------------------------------//
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-       // botonListener = new buttonListener(this);
+        // botonListener = new buttonListener(this);
 
         LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -103,14 +120,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+//---------------------------------------------------------------------------------//
+
         // IDENTIFICADOR DE PROYECTO:   861311781554
         DataHolder.instance.initPushNotificationsAdmin(this, "861311781554");
         Toast.makeText(this, " REGISTRADO EN GCM APLICACIÓN... ", Toast.LENGTH_SHORT).show();
         DataHolder.instance.pushNotificationAdmin.registerToNotification();
         Toast.makeText(this, " REGISTRO COMPLETADO SATISFACTORIAMENTE EN EL SERVICIO DE GOOGLE CLOUD MESSAGING", Toast.LENGTH_SHORT).show();
 
-
-
+//---------------------------------------------------------------------------------//
+        myYouTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
+                .findFragmentById(R.id.youtubeplayerfragment);
+        myYouTubePlayerFragment.initialize(DEVELOPER_KEY, this);
+//---------------------------------------------------------------------------------//
     }
 
     @Override
@@ -188,8 +210,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String latitud = (fields.get("latitud")).toString();
                 String longitud = (fields.get("longitud")).toString();
 
+                final String youtube = (fields.get("youtube")).toString();
+
                 LatLng marcador = new LatLng(Double.parseDouble(latitud), Double.parseDouble(longitud));
-                mMap.addMarker(new MarkerOptions().position(marcador).title(titulo));
+                mMap.addMarker(new MarkerOptions().position(marcador).snippet("youtube").title("lugar: " + titulo + " / id video: " + youtube));
+                VIDEO_ID =youtube;
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        Toast.makeText(getApplicationContext(),
+                                "click en:" + marker.getTitle(), Toast.LENGTH_SHORT).show();
+
+
+                        VIDEO_ID=marker.getSnippet();
+                        /*myYouTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager()
+                                .findFragmentById(R.id.youtubeplayerfragment);
+                        myYouTubePlayerFragment.initialize(DEVELOPER_KEY, listeneryoutube);*/
+
+
+                        youTubePlayer.cueVideo(VIDEO_ID);
+
+                        return true;
+                    }
+
+                });
+
 
             }
 
@@ -207,6 +253,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         qbAdminLocalizaciones.getData();
         Toast.makeText(this, " deescargando coordenadas... ", Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        if (!b) {
+            this.youTubePlayer = youTubePlayer;
+           // youTubePlayer.cueVideo(VIDEO_ID);
+        }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        {
+            if (youTubeInitializationResult.isUserRecoverableError()) {
+                youTubeInitializationResult.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
+            } else {
+                String errorMessage = String.format(
+                        "There was an error initializing the YouTubePlayer (%1$s)",
+                        youTubeInitializationResult.toString());
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public YouTubePlayer.Provider getYouTubePlayerProvider() {
+        return (YouTubePlayerView)findViewById(R.id.youtubeplayerfragment);
     }
 }
 
